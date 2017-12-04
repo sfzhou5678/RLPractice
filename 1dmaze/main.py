@@ -16,7 +16,7 @@ def get_reward_table(maze_len, act_list_len):
 
 
 def choose_action(cur_state, q_table, EPSILON):
-  if (np.random.uniform() > EPSILON) or (np.sum(np.abs(q_table)) == 0):
+  if (np.random.uniform() > EPSILON) or (np.sum(np.abs(q_table[cur_state])) == 0):
     action_index = np.random.randint(0, len(q_table[0]))
   else:
     action_index = np.argmax(q_table[cur_state])
@@ -49,7 +49,7 @@ def main():
   ACTION_LIST = ['LEFT', 'RIGHT']
   EPSILON = 0.9  # greedy police
   LEARNING_RATE = 0.1  # learning rate
-  GAMMA = 0.8  # discount factor
+  GAMMA = 0.9  # discount factor
   MAX_EPISODES = 13  # maximum episodes
   REFRESH_TIME = 0.2  # fresh time for one move
 
@@ -68,20 +68,20 @@ def main():
     while not is_terminated:
       action_index = choose_action(cur_state, q_table, EPSILON)
       next_state, reward = get_env_feed(reward_table, cur_state, action_index)
-      q_predict = q_table[cur_state, action_index]
-      if next_state == MAZE_LENGTH - 1:
-        is_terminated = True
 
-      q_target = reward
-      if not is_terminated:
-        q_target += GAMMA * np.argmax(q_table[next_state])
+      # Bellman Equation: Q[st,at]+=α(reward +γ*max(Q[st+1,at+1])-Q[st,at])
+      q_target = reward + GAMMA * np.max(q_table[next_state])
+      q_predict = q_table[cur_state, action_index]
       q_table[cur_state, action_index] += LEARNING_RATE * (q_target - q_predict)
 
       cur_state = next_state
       step_counter += 1
-      # update_env(cur_state, MAZE_LENGTH, REFRESH_TIME)
 
-    print(episode,step_counter)
+      # update_env(cur_state, MAZE_LENGTH, REFRESH_TIME)
+      if next_state == MAZE_LENGTH - 1:
+        is_terminated = True
+
+    print(episode, step_counter)
     print(q_table)
 
 
