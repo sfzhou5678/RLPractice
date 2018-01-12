@@ -9,8 +9,8 @@ def get_q_table(maze_length, action_list_length):
 
 
 def get_reward_table(maze_len, act_list_len):
-  reward_table = np.zeros(shape=[maze_len, act_list_len])
-  reward_table[maze_len - 2, 1] = 1
+  reward_table = -0.01*np.ones(shape=[maze_len, act_list_len])
+  reward_table[maze_len - 2, 1] = maze_len
 
   return reward_table
 
@@ -45,12 +45,12 @@ def update_env(cur_state, maze_len, regresh_time):
 
 
 def main():
-  MAZE_LENGTH = 6
+  MAZE_LENGTH = 1000
   ACTION_LIST = ['LEFT', 'RIGHT']
   EPSILON = 0.9  # greedy police
   LEARNING_RATE = 0.1  # learning rate
   GAMMA = 0.9  # discount factor
-  MAX_EPISODES = 13  # maximum episodes
+  MAX_EPISODES = 1000  # maximum episodes
   REFRESH_TIME = 0.2  # fresh time for one move
 
   q_table = get_q_table(MAZE_LENGTH, len(ACTION_LIST))
@@ -82,7 +82,7 @@ def main():
         is_terminated = True
 
     print(episode, step_counter)
-    print(q_table)
+  print(q_table)
 
 
 if __name__ == '__main__':

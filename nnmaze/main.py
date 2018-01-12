@@ -1,6 +1,12 @@
+import tensorflow as tf
 import numpy as np
 import time
 import os
+
+
+class DQNet:
+  def __init__(self):
+    self
 
 
 def get_q_table(maze_length, action_list_length):
@@ -93,7 +99,6 @@ def main():
   # q_table = get_q_table(MAZE_LENGTH, len(ACTION_LIST))
   q_table = {}
 
-  # todo init maze
   holes = []
   while len(holes) < MAZE_HELL_NUM:
     x = np.random.randint(0, MAZE_WIDTH)
