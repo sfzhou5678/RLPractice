@@ -47,7 +47,7 @@ class DQN(object):
     self.action_input = tf.placeholder(tf.float32, [None, self.action_dim])  # one hot presentation
     self.y_input = tf.placeholder(tf.float32, [None])  # TODO? y???
 
-    q_action = tf.reduce_sum(tf.matmul(self.q_value, self.action_input))
+    q_action = tf.reduce_sum(tf.multiply(self.q_value, self.action_input))
     self.loss = tf.reduce_mean(tf.square(self.y_input - q_action))
 
     self.opt = tf.train.AdadeltaOptimizer(1e-5).minimize(self.loss)
